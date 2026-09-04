@@ -8,14 +8,14 @@ class RecoveryCaseBase(BaseModel):
     transaction_id: Optional[str] = None
     checkout_session_id: Optional[str] = None
     customer_id: Optional[str] = None
-    amount: float = Field(..., ge=0)
+    amount: float = Field(..., gt=0)
 
     risk_score: float = Field(..., ge=0.0, le=100.0)
-    risk_level: str
+    risk_level: Literal["LOW", "MEDIUM", "HIGH", "CRITICAL"]
     priority_score: float = Field(0.0, ge=0.0, le=100.0)
-    priority_level: str = "MEDIUM"
+    priority_level: Literal["LOW", "MEDIUM", "HIGH", "CRITICAL"] = "MEDIUM"
     risk_factors: Optional[List[str]] = None
-    status: str
+    status: Literal["OPEN", "DIAGNOSED", "ACTION_PENDING", "IN_PROGRESS", "RECOVERY_PENDING", "RECOVERING", "RECOVERED", "FAILED", "ESCALATED", "STOPPED"]
 
     ai_root_cause: Optional[str] = None
     ai_recommended_action: Optional[str] = None
