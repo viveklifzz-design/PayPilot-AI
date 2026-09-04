@@ -94,6 +94,7 @@ async def seed_demo_data_if_empty():
     from app.models.receivables_and_mandates import Mandate, Invoice
     from app.models.audit_log import AuditLog
     from app.models.notification import Notification
+    from app.models.base import utc_now
     from app.services.recovery.reconciliation_service import reconciliation_service
     from sqlalchemy import select
 
@@ -497,13 +498,12 @@ async def seed_demo_data_if_empty():
             # Notifications
             n1 = Notification(
                 id="notif_001",
+                case_id="case_rec_001",
                 merchant_id=merchant_id,
-                customer_id="cust_acme_corp",
-                channel="WHATSAPP",
-                recipient="+919876543210",
-                template_name="PAYMENT_RECOVERY_LINK",
-                status="DELIVERED",
-                content="PayPilot AI: Your payment of INR 15,000 to Acme Technologies requires re-authorization. Click to recover."
+                type="PAYMENT_RECOVERY_LINK",
+                severity="INFO",
+                title="Payment Recovery Link Delivered",
+                message="PayPilot AI: Your payment of INR 15,000 to Acme Technologies requires re-authorization. Click to recover."
             )
             existing_n = await db.execute(select(Notification).where(Notification.id == n1.id))
             if not existing_n.scalar_one_or_none():

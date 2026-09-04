@@ -71,7 +71,7 @@ class ProviderReconciliationService:
                 (Transaction.razorpay_payment_id == "pay_TTXlSqxyg5hAiT")
             )
         )
-        case = case_res.scalar_one_or_none()
+        case = case_res.scalars().first()
 
         if not case:
             # Fallback: query active case for INR 10.00
