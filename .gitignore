@@ -1,0 +1,40 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env.local
+
+# Python Virtual Environments & Caches
+venv/
+.venv/
+backend/venv/
+backend/.venv/
+**/__pycache__/
+**/*.pyc
+backend/.pytest_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs & Temporary Files
+*.log
+*.tmp
+*.bak
+
+# Node / Frontend
+node_modules/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# System / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
