@@ -106,18 +106,20 @@ export default function TransactionsPage() {
                 <th className="py-3 px-4">Method</th>
                 <th className="py-3 px-4">Status</th>
                 <th className="py-3 px-4">Recovery Status</th>
+                <th className="py-3 px-4">Data Lineage</th>
                 <th className="py-3 px-4 text-right">Created On</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-sans">
               {loading && transactions.length === 0 ? (
-                <tr><td colSpan={7} className="py-8 text-center text-slate-400">Loading transactions...</td></tr>
+                <tr><td colSpan={8} className="py-8 text-center text-slate-400">Loading transactions...</td></tr>
               ) : transactions.length === 0 ? (
-                <tr><td colSpan={7} className="py-8 text-center text-slate-400">No transactions found.</td></tr>
+                <tr><td colSpan={8} className="py-8 text-center text-slate-400">No transactions found.</td></tr>
               ) : (
                 transactions.map((t) => {
                   const isCaptured = t.status === 'captured';
                   const isFailed = t.status === 'failed';
+                  const isProviderVerified = t.data_lineage === 'PROVIDER VERIFIED' || Boolean(t.razorpay_payment_id?.startsWith('pay_'));
 
                   return (
                     <tr 
@@ -155,16 +157,27 @@ export default function TransactionsPage() {
                         )}
                       </td>
                       <td className="py-3.5 px-4 font-mono font-bold">
-                        {t.recovery_status === 'RECOVERED' || isCaptured ? (
+                        {t.recovery_status === 'RECOVERED' ? (
                           <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
                             RECOVERED
                           </span>
-                        ) : isFailed ? (
+                        ) : t.recovery_status === 'LINKED TO CASE' ? (
                           <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                            RECOVERING
+                            LINKED TO CASE
                           </span>
                         ) : (
-                          <span className="text-slate-400 font-normal">None</span>
+                          <span className="text-slate-400 font-normal">NOT LINKED</span>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4 font-mono">
+                        {isProviderVerified ? (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                            PROVIDER VERIFIED
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                            DEMO / SYNTHETIC
+                          </span>
                         )}
                       </td>
                       <td className="py-3.5 px-4 text-right font-mono text-slate-500 whitespace-nowrap">

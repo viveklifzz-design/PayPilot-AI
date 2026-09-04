@@ -157,6 +157,7 @@ export interface TransactionItem {
   created_at: string;
   recovery_case_id?: string | null;
   recovery_status?: string | null;
+  data_lineage?: string | null;
 }
 
 export interface RecoveryCaseItem {

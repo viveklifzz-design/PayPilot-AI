@@ -116,6 +116,19 @@ class RazorpayClientService:
             logger.error(f"Failed to fetch payment '{payment_id}': {e}")
             raise PaymentGatewayException(f"Razorpay payment fetch failed: {e}")
 
+    def fetch_all_payments(self, count: int = 100, skip: int = 0) -> Dict[str, Any]:
+        """Fetch all payments from Razorpay Test Mode API."""
+        if not self.is_configured:
+            logger.warning("Razorpay credentials unconfigured. Returning empty payments collection.")
+            return {"entity": "collection", "count": 0, "items": []}
+
+        try:
+            logger.info(f"Fetching Razorpay payments (count={count}, skip={skip})")
+            return self.client.payment.all({"count": count, "skip": skip})
+        except Exception as e:
+            logger.error(f"Failed to fetch Razorpay payments: {e}")
+            raise PaymentGatewayException(f"Razorpay payment fetch all failed: {e}")
+
     def create_payment_link(
         self,
         amount: float,

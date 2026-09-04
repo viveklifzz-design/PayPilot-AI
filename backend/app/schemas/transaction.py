@@ -27,6 +27,7 @@ class TransactionResponse(TransactionBase):
     created_at: datetime
     recovery_case_id: Optional[str] = None
     recovery_status: Optional[str] = None
+    data_lineage: Optional[str] = "PROVIDER VERIFIED"
 
     model_config = ConfigDict(from_attributes=True)
 
