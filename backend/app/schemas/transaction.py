@@ -7,7 +7,8 @@ class TransactionBase(BaseModel):
     customer_id: Optional[str] = None
     razorpay_payment_id: Optional[str] = None
     razorpay_order_id: Optional[str] = None
-    amount: float = Field(..., gt=0)
+    amount: float = Field(..., ge=0)
+
     currency: str = "INR"
     status: str
     error_code: Optional[str] = None
