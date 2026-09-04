@@ -30,6 +30,9 @@ class TransactionResponse(TransactionBase):
 
     @field_serializer("created_at")
     def serialize_created_at(self, dt: datetime, _info) -> str:
+        if isinstance(dt, str):
+            return dt
         if dt.tzinfo is None:
             dt = dt.replace(tzinfo=timezone.utc)
         return dt.isoformat()
+

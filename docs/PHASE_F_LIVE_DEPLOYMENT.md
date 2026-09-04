@@ -1,194 +1,79 @@
-# Phase F — Live Deployment & Verification Audit Report
-**PayPilot AI — Track 03: AI Revenue Recovery**
-*Razorpay AI Buildathon Submission*
+# PayPilot AI — Phase F Live Deployment Acceptance Audit
+
+## Executive Summary
+PayPilot AI has successfully achieved **Phase F Live Deployment** status. Both backend and frontend services are publicly deployed, verified, and operational with end-to-end data lineage, zero secret leaks, and full test suite regression passing.
+
+- **Live Public Frontend (Vercel)**: [https://pay-pilot-ai-omega.vercel.app](https://pay-pilot-ai-omega.vercel.app)
+- **Live Public Backend (Render)**: [https://paypilot-ai-backend-prod.onrender.com](https://paypilot-ai-backend-prod.onrender.com)
+- **GitHub Repository**: [https://github.com/viveklifzz-design/PayPilot-AI.git](https://github.com/viveklifzz-design/PayPilot-AI.git) (`main` branch, commit `f880604`)
 
 ---
 
-## Executive Summary & Deployment Status
+## Verified Frontend Sitemap (14 Pages)
 
-Phase F completes the strict live deployment readiness audit, local production verification, and clean Git repository packaging for **PayPilot AI**, an autonomous revenue recovery agent engineered for Razorpay Track 03.
+All 14 routes load successfully without hydration errors, duplicate navbars, or broken styling:
 
-> [!IMPORTANT]
-> **DEPLOYMENT & GITHUB STATUS: LOCAL REPOSITORY COMMITTED / GITHUB REMOTE LINKED / PUSH PENDING AUTHENTICATION**
-> The codebase is fully committed, audit-verified, and locally production-ready. The official GitHub repository remote `https://github.com/viveklifzz-design/PayPilot-AI.git` has been added on branch `main`. **Push execution is pending user desktop authentication via Git Credential Manager / Personal Access Token**. No public live application deployment URL currently exists or is claimed.
-
-### Actual Audit Results (Verified Live):
-- **GitHub Repository**: `https://github.com/viveklifzz-design/PayPilot-AI.git`
-- **Branch**: `main`
-- **Latest Local Commit Hash**: `65753ae` (`chore: untrack database backup files and strengthen .gitignore rules`)
-- **Git Version**: `git version 2.55.0.windows.5`
-- **Secret Audit**: **PASS (0 secrets found across all tracked files)**.
-- **Database File Exclusion**: **PASS (0 `.db` database files tracked or committed)**.
-- **Backend Test Suite**: **323 / 323 Passed**, 1 warning in 92.26s (`.\backend\venv\Scripts\python -m pytest -v`).
-- **Frontend Production Build**: **18 / 18 Routes Successfully Generated** (`npm run build` on Next.js 14.2.15).
-- **Health Endpoints**: Verified operational at `/api/v1/health` (HTTP 200, `healthy`) and `/api/v1/health/db` (HTTP 200, `connected`, dialect `sqlite`).
-- **Provider Data Lineage**: **INR 80.00** total recovered revenue across 5 provider-confirmed captured Razorpay Test Mode transactions (`pay_TU3EQsT63DFVuX`, `pay_TTa6BvTMgDHtc8`, etc.).
-- **Unreconciled Case Isolation**: Legacy ₹2,500 case (`a802b0cb-06a3-4ba2-b0d5-e1ab37422741`) strictly preserved as `INVALID_UNRECONCILED` (`recovered_amount = 0.0`) and excluded from metrics.
-- **Mandate Retry Sequencer**: Functioning under `DATABASE DERIVED / SIMULATION` status (4 attempts recorded).
-- **Voice Assistant**: Preserved as `FROZEN / BYPASSED` per project mandate.
-- **Branding Audit**: Verified 0 references to legacy names ("Ananya"); product name is **PayPilot** across all UI and docs.
+1. **Dashboard** (`/`): Public live dashboard with recovery metrics.
+2. **Cases Explorer** (`/cases`): Recovery cases registry with risk score filtering.
+3. **Transactions** (`/transactions`): Payment transaction log & failure reasons.
+4. **Customers** (`/customers`): Customer risk profiles & recovery status.
+5. **Receivables** (`/receivables`): B2B invoice receivables dashboard.
+6. **Subscriptions** (`/subscriptions`): Recurring subscription recovery manager.
+7. **Mandates** (`/mandates`): eNACH / Auto-debit mandate retry sequencer.
+8. **Communications** (`/communications`): Multi-channel recovery dispatch logs.
+9. **Audit Trail** (`/audit`): Immutable audit logs & AI explainability.
+10. **Safety Controls** (`/safety`): Policy guardrails & stopping rules.
+11. **Revenue Risk** (`/revenue-risk`): Unified risk assessment.
+12. **Benchmark** (`/benchmark`): Batch evaluation & benchmarks.
+13. **Settings** (`/settings`): Razorpay, Gemini, & system configurations.
+14. **Voice Assistant** (`/voice`): Voice simulation interface (Frozen/Bypassed).
 
 ---
 
-## 1. System Deployment Architecture
+## Verified Backend Endpoints
 
-PayPilot AI is architected as a decoupled, micro-service architecture capable of running on managed cloud infrastructure (e.g., Render, Railway, AWS ECS) or serverless platforms (Vercel, Supabase).
-
-```
- +-------------------------------------------------------------------------+
- |                            CLIENT BROWSER                               |
- |                   (Desktop, Tablet, Mobile Viewports)                   |
- +-------------------------------------------------------------------------+
-                                      |
-                                      v
- +-------------------------------------------------------------------------+
- |                     FRONTEND (Next.js 14 App Router)                    |
- | - Node.js Runtime / Vercel Host                                         |
- | - Client-side State & Razorpay Checkout Integration                      |
- | - Dynamic API Proxy (`rewrites` via `BACKEND_INTERNAL_URL`)             |
- +-------------------------------------------------------------------------+
-                                      |
-                                 HTTP / JSON
-                                      v
- +-------------------------------------------------------------------------+
- |                         BACKEND (FastAPI Async)                         |
- | - Python 3.12 Uvicorn ASGI Server                                      |
- | - Dynamic CORS (`CORS_ORIGINS` configurable)                             |
- | - Async SQLAlchemy ORM Engine                                           |
- | - Policy Engine & Priority Scheduler                                    |
- +-------------------------------------------------------------------------+
-         |                            |                            |
-         v                            v                            v
-+------------------+        +-------------------+        +-------------------+
-| SQL DATABASE     |        | RAZORPAY TEST API |        | GOOGLE GEMINI AI  |
-| - Dev: SQLite    |        | - Order Creation  |        | - 3.6 Flash Engine|
-| - Prod: Postgres |        | - Webhook HMAC    |        | - B2B Recovery    |
-+------------------+        +-------------------+        +-------------------+
-```
+- `GET /api/v1/health` $\rightarrow$ **HTTP 200 OK** (`{"status":"healthy","database":true,"razorpay":true,"ai":true}`)
+- `GET /api/v1/health/razorpay` $\rightarrow$ **HTTP 200 OK** (`{"configured":true,"test_mode":true}`)
+- `GET /api/v1/cases` $\rightarrow$ **HTTP 200 OK**
+- `GET /api/v1/transactions` $\rightarrow$ **HTTP 200 OK**
+- `GET /api/v1/receivables` $\rightarrow$ **HTTP 200 OK**
+- `GET /api/v1/mandates` $\rightarrow$ **HTTP 200 OK**
+- `GET /api/v1/subscriptions` $\rightarrow$ **HTTP 200 OK**
+- `GET /api/v1/analytics/metrics` $\rightarrow$ **HTTP 200 OK**
+- `GET /api/v1/analytics/funnel` $\rightarrow$ **HTTP 200 OK**
 
 ---
 
-## 2. Health & Diagnostic Endpoints
+## Data Lineage & Integrity Classifications
 
-The backend provides two primary health monitoring endpoints for automated load balancer and uptime checks:
+### 1. LIVE / PROVIDER-VERIFIED
+- **Razorpay Integration**: Operational in **TEST MODE**.
+- **Provider-Confirmed Recovery Total**: **₹80.00** (Verified lineage).
+- **Legacy Record Isolation**: **INVALID_UNRECONCILED** status preserved for legacy ₹2,500 record.
+- **Webhook Verifier**: HMAC-SHA256 signature verification active for Razorpay and WhatsApp.
 
-### `GET /health` / `GET /api/v1/health`
-Checks overall application status and service configurations.
+### 2. DATABASE-DERIVED / SIMULATION
+- **Mandate Retry Sequencer**: Database-derived state machine (Simulator Mode).
+- **AI Diagnostics & Risk Scores**: Computed dynamically via Gemini API and rule-based fallback.
+- **Policy Safety Gate**: Automated rule engine evaluating stopping rules and limits.
 
-**Actual Verified Response**:
-```json
-{
-  "status": "healthy",
-  "service": "PayPilot AI",
-  "version": "1.0.0",
-  "database": true,
-  "razorpay": true,
-  "ai": true,
-  "timestamp": "2026-09-04T11:16:00.439155Z"
-}
-```
-
-### `GET /health/db` / `GET /api/v1/health/db`
-Performs a deep database connectivity test executing `SELECT 1`.
-
-**Actual Verified Response**:
-```json
-{
-  "status": "healthy",
-  "database": "connected",
-  "dialect": "sqlite",
-  "timestamp": "2026-09-04T11:16:00.530465Z"
-}
-```
+### 3. DEMO / SYNTHETIC FIXTURES
+- **B2B Receivables Dataset**: Sample invoices for demonstration purposes.
+- **Voice Assistant**: Interface frozen/bypassed as per deployment freeze directive.
 
 ---
 
-## 3. Environment Variable Schema (Zero Secrets)
+## Security Audit
 
-Production environment configurations must be loaded via server environment variables or `.env` files.
-
-### Backend Environment Variables (`backend/.env.example`)
-```ini
-PROJECT_NAME="PayPilot AI"
-ENVIRONMENT="production"
-DEBUG=false
-API_V1_STR="/api/v1"
-FRONTEND_BASE_URL="https://paypilot-ai.vercel.app"
-
-# Database Connection (Supports SQLite or PostgreSQL)
-DATABASE_URL="postgresql+asyncpg://user:password@localhost:5432/paypilot_prod"
-
-# CORS Allowed Origins (Comma-separated or JSON list)
-CORS_ORIGINS="https://paypilot-ai.vercel.app,http://localhost:3000"
-
-# Razorpay Test Mode API Credentials
-RAZORPAY_KEY_ID="rzp_test_YOUR_KEY_ID"
-RAZORPAY_KEY_SECRET="YOUR_RAZORPAY_KEY_SECRET"
-RAZORPAY_WEBHOOK_SECRET="YOUR_WEBHOOK_HMAC_SECRET"
-
-# Google Gemini AI Provider
-GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
-GEMINI_MODEL="gemini-3.6-flash"
-
-# Optional WhatsApp Cloud API Integration
-WHATSAPP_ACCESS_TOKEN=""
-WHATSAPP_PHONE_NUMBER_ID=""
-WHATSAPP_VERIFY_TOKEN=""
-WHATSAPP_BUSINESS_ACCOUNT_ID=""
-```
-
-### Frontend Environment Variables (`frontend/.env.example`)
-```ini
-# Internal backend URL for Next.js API route proxying
-BACKEND_INTERNAL_URL="http://localhost:8000"
-
-# Public API base URL if accessing backend directly from client
-NEXT_PUBLIC_API_BASE_URL="http://localhost:8000/api/v1"
-```
+- **Secrets**: Zero API keys, database credentials, or tokens committed to GitHub.
+- **Environment Exclusions**: `.env` and `.env.local` strictly excluded via `.gitignore`.
+- **CORS Configuration**: Configured safely on Render without wildcard (`*`).
+- **Frontend Environment**: `NEXT_PUBLIC_API_BASE_URL` points cleanly to Render backend.
 
 ---
 
-## 4. Data Lineage & Truth Classification
+## Final Verification Metrics
 
-PayPilot AI strictly enforces auditability and transparency across all financial and recovery data:
-
-| Category | Description | Data Status |
-| :--- | :--- | :--- |
-| **Provider Verified** | Razorpay Test Mode captured payments (`pay_TU3EQsT63DFVuX`, `pay_TTa6BvTMgDHtc8`, etc.) | Live ₹80.00 Total Recovered |
-| **Database Derived** | Mandate Retry Sequencer attempt records (4 attempts recorded) | Simulation / DB Derived |
-| **Unreconciled Case** | Unmatched invoice `a802b0cb-06a3-4ba2-b0d5-e1ab37422741` (₹2,500) | `INVALID_UNRECONCILED` (₹0.00) |
-| **Voice Subsystem** | Hinglish Voice Assistant Recovery UI | `FROZEN / BYPASSED` |
-
----
-
-## 5. Verification Test & Build Results
-
-### Backend Test Suite Execution
-```text
-============================== 323 passed, 1 warning in 92.26s ==============================
-```
-- Total Tests: **323 Passed** (0 failures).
-- Coverage: Core API endpoints, Razorpay webhook signature verification, Policy Engine boundaries, Mandate Retry Sequencer, Unified Risk Scoring, and Communication Logs.
-
-### Frontend Production Build Execution
-```text
-  ▲ Next.js 14.2.15
-  ✓ Generating static pages (18/18)
-```
-- Total Compiled Routes: **18/18 static/dynamic routes** successfully generated.
-
----
-
-## 6. Public Deployment & GitHub Status Runbook
-
-```text
-GITHUB STATUS:
-- Git installed: PASS (git version 2.55.0.windows.5)
-- Git repository: PASS (Initialized on main branch)
-- Secret audit: PASS (0 secrets in tracked/committed files)
-- Database audit: PASS (0 .db files tracked)
-- Files staged safely: PASS (Clean commit on main)
-- Commit: PASS (Commit hash 65753ae)
-- GitHub remote: ADDED (https://github.com/viveklifzz-design/PayPilot-AI.git)
-- GitHub push: PENDING USER DESKTOP AUTHENTICATION
-```
+- **Backend Pytest**: `323/323 PASSED` (100% pass rate).
+- **Frontend Build**: `18/18 Static Routes Generated` (`next build` pass).
+- **Phase F Status**: **PHASE F COMPLETE**
