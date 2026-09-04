@@ -15,7 +15,7 @@ class RecoveryCaseBase(BaseModel):
     priority_score: float = Field(0.0, ge=0.0, le=100.0)
     priority_level: Literal["LOW", "MEDIUM", "HIGH", "CRITICAL"] = "MEDIUM"
     risk_factors: Optional[List[str]] = None
-    status: Literal["OPEN", "DIAGNOSED", "ACTION_PENDING", "IN_PROGRESS", "RECOVERY_PENDING", "RECOVERING", "RECOVERED", "FAILED", "ESCALATED", "STOPPED", "ENGAGED"]
+    status: Literal["OPEN", "DIAGNOSED", "ACTION_PENDING", "IN_PROGRESS", "RECOVERY_PENDING", "RECOVERING", "RECOVERED", "FAILED", "ESCALATED", "STOPPED", "ENGAGED", "INVALID_UNRECONCILED"]
 
 
     ai_root_cause: Optional[str] = None
