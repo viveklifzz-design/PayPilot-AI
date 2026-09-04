@@ -42,16 +42,20 @@ async def init_db():
 
     # RecoveryCase table column migrations
     for col_name, col_type in [
+        ("case_type", "VARCHAR(50) DEFAULT 'PAYMENT_FAILURE' NOT NULL"),
         ("priority_score", "NUMERIC(5, 2) DEFAULT 0.0"),
         ("priority_level", "VARCHAR(20) DEFAULT 'MEDIUM'"),
         ("risk_factors", "JSON"),
         ("checkout_session_id", "VARCHAR(36)"),
+        ("subscription_id", "VARCHAR(36)"),
         ("subscription_attempt_id", "VARCHAR(36)"),
         ("invoice_id", "VARCHAR(36)"),
         ("mandate_id", "VARCHAR(36)"),
         ("stop_reason", "TEXT"),
         ("ai_reasoning", "TEXT"),
         ("policy_failure_reason", "TEXT"),
+        ("actual_action_taken", "VARCHAR(50)"),
+        ("recovered_amount", "NUMERIC(12, 2) DEFAULT 0.00"),
     ]:
         try:
             async with engine.begin() as conn:
@@ -65,6 +69,7 @@ async def init_db():
         ("payment_method", "VARCHAR(50)"),
         ("error_source", "VARCHAR(100)"),
         ("error_step", "VARCHAR(100)"),
+        ("error_reason", "VARCHAR(100)"),
     ]:
         try:
             async with engine.begin() as conn:
@@ -73,6 +78,7 @@ async def init_db():
             pass  # Column already exists
 
     logger.info("Database tables initialized successfully.")
+
 
 
 
