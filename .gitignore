@@ -19,6 +19,8 @@ htmlcov/
 
 # Databases
 *.db
+*.db.*
+*.db_*
 *.sqlite
 *.sqlite3
 
