@@ -369,3 +369,10 @@ async def reconcile_provider_recovery_endpoint(
         verification_source="RAZORPAY_API_RECONCILIATION"
     )
 
+@router.post("/demo/seed", tags=["Demo Seeding"])
+async def trigger_demo_seeding(db: AsyncSession = Depends(get_db)):
+    """Triggers complete demo data seeding and provider reconciliation on-demand."""
+    from app.db.init_db import seed_demo_data_if_empty
+    await seed_demo_data_if_empty()
+    return {"status": "success", "message": "Demo data seeding and reconciliation executed."}
+
