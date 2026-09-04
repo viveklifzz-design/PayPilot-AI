@@ -84,8 +84,9 @@ async def generic_exception_handler(request: Request, exc: Exception):
         content={
             "error": {
                 "code": "INTERNAL_SERVER_ERROR",
-                "message": "An unexpected error occurred on the server.",
+                "message": f"An unexpected error occurred on the server: {str(exc)}",
                 "path": request.url.path
             }
         }
     )
+
