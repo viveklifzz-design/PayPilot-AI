@@ -40,7 +40,40 @@ async def init_db():
         except Exception:
             pass  # Column already exists
 
+    # RecoveryCase table column migrations
+    for col_name, col_type in [
+        ("priority_score", "NUMERIC(5, 2) DEFAULT 0.0"),
+        ("priority_level", "VARCHAR(20) DEFAULT 'MEDIUM'"),
+        ("risk_factors", "JSON"),
+        ("checkout_session_id", "VARCHAR(36)"),
+        ("subscription_attempt_id", "VARCHAR(36)"),
+        ("invoice_id", "VARCHAR(36)"),
+        ("mandate_id", "VARCHAR(36)"),
+        ("stop_reason", "TEXT"),
+        ("ai_reasoning", "TEXT"),
+        ("policy_failure_reason", "TEXT"),
+    ]:
+        try:
+            async with engine.begin() as conn:
+                await conn.execute(text(f"ALTER TABLE recovery_cases ADD COLUMN {col_name} {col_type}"))
+        except Exception:
+            pass  # Column already exists
+
+    # Transaction table column migrations
+    for col_name, col_type in [
+        ("raw_payload", "JSON"),
+        ("payment_method", "VARCHAR(50)"),
+        ("error_source", "VARCHAR(100)"),
+        ("error_step", "VARCHAR(100)"),
+    ]:
+        try:
+            async with engine.begin() as conn:
+                await conn.execute(text(f"ALTER TABLE transactions ADD COLUMN {col_name} {col_type}"))
+        except Exception:
+            pass  # Column already exists
+
     logger.info("Database tables initialized successfully.")
+
 
 
 
