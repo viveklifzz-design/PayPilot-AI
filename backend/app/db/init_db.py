@@ -221,8 +221,19 @@ async def seed_demo_data_if_empty():
                 error_reason="overdue_receivable",
                 error_description="B2B invoice overdue (INV-P2P-VERIFY-1787594827)"
             )
+            t_legacy = Transaction(
+                id="txn_legacy_001",
+                merchant_id=merchant_id,
+                customer_id="cust_acme_corp",
+                amount=2500.00,
+                currency="INR",
+                status="failed",
+                error_code="BAD_REQUEST_PAYMENT_TIMED_OUT",
+                error_reason="timed_out",
+                error_description="Legacy unverified test transaction"
+            )
 
-            for t_obj in [t1, t2, t3, t4, t5, t6]:
+            for t_obj in [t1, t2, t3, t4, t5, t6, t_legacy]:
                 existing_t = await db.execute(select(Transaction).where(Transaction.id == t_obj.id))
                 if not existing_t.scalar_one_or_none():
                     db.add(t_obj)
@@ -357,6 +368,7 @@ async def seed_demo_data_if_empty():
                 case_type="PAYMENT_FAILURE",
                 merchant_id=merchant_id,
                 customer_id="cust_acme_corp",
+                transaction_id="txn_legacy_001",
                 amount=2500.00,
                 risk_score=11.25,
                 risk_level="LOW",
