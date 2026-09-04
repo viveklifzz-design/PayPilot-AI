@@ -348,3 +348,24 @@ async def demo_execute_case_recovery(
     db: AsyncSession = Depends(get_db)
 ):
     return await execute_case_recovery(case_id, req, db)
+
+class ReconcileProviderRecoveryRequest(BaseModel):
+    payment_id: str = "pay_TU3EQsT63DFVuX"
+    order_id: str = "order_TU2xgzptEfg7rP"
+
+@router.post("/recovery/reconcile", tags=["Recovery Execution"])
+async def reconcile_provider_recovery_endpoint(
+    req: Optional[ReconcileProviderRecoveryRequest] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    """Reconciles a real provider-confirmed recovery payment directly against Razorpay API."""
+    from app.services.recovery.reconciliation_service import reconciliation_service
+    p_id = req.payment_id if (req and req.payment_id) else "pay_TU3EQsT63DFVuX"
+    o_id = req.order_id if (req and req.order_id) else "order_TU2xgzptEfg7rP"
+    return await reconciliation_service.reconcile_provider_recovery(
+        payment_id=p_id,
+        order_id=o_id,
+        db=db,
+        verification_source="RAZORPAY_API_RECONCILIATION"
+    )
+
