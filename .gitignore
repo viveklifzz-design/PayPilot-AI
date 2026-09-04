@@ -40,3 +40,7 @@ frontend/out/
 Thumbs.db
 .vscode/
 .idea/
+
+# Scratch directory
+scratch/
+

@@ -1,8 +1,18 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
+export function buildApiUrl(endpoint: string): string {
+  const baseUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || '').replace(/\/$/, '');
+  if (!baseUrl) {
+    return endpoint;
+  }
+  if (baseUrl.endsWith('/api/v1') && endpoint.startsWith('/api/v1')) {
+    return `${baseUrl}${endpoint.substring(7)}`;
+  }
+  return `${baseUrl}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
+}
+
 export async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  const isClient = typeof window !== 'undefined';
-  const url = isClient && endpoint.startsWith('/') ? endpoint : `${API_BASE_URL}${endpoint}`;
+  const url = buildApiUrl(endpoint);
   const startTime = Date.now();
   console.log(`[API START] ${options?.method || 'GET'} ${url}`);
   try {
@@ -703,17 +713,14 @@ export const api = {
   },
   getUnreadCount: () => fetchJson<UnreadCountResponse>('/api/v1/notifications/unread-count'),
   markNotificationRead: (id: string) => {
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-    return fetch(`${apiBase}/api/v1/notifications/${id}/read`, { method: 'POST' }).then((r) => r.json() as Promise<NotificationItem>);
+    return fetch(buildApiUrl(`/api/v1/notifications/${id}/read`), { method: 'POST' }).then((r) => r.json() as Promise<NotificationItem>);
   },
   markAllNotificationsRead: () => {
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-    return fetch(`${apiBase}/api/v1/notifications/read-all`, { method: 'POST' }).then((r) => r.json());
+    return fetch(buildApiUrl('/api/v1/notifications/read-all'), { method: 'POST' }).then((r) => r.json());
   },
   getFailureScenarios: () => fetchJson<FailureScenario[]>('/api/v1/health/failure-scenarios'),
   simulateFailure: (scenario_key: string, target_case_id?: string) => {
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-    return fetch(`${apiBase}/api/v1/health/simulate-failure`, {
+    return fetch(buildApiUrl('/api/v1/health/simulate-failure'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ scenario_key, target_case_id })
@@ -747,8 +754,7 @@ export const api = {
   getCaseFunnelLineage: (caseId: string) => fetchJson<CaseFunnelLineageResponse>(`/api/v1/cases/${caseId}/funnel-lineage`),
   getCaseAIEvaluation: (caseId: string) => fetchJson<CaseAIEvaluationResponse>(`/api/v1/cases/${caseId}/ai-evaluation`),
   postHumanAction: (caseId: string, action: HumanActionRequest['action'], reason?: string, operatorId = 'HUMAN_OPERATOR') => {
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-    return fetch(`${apiBase}/api/v1/cases/${caseId}/human-action`, {
+    return fetch(buildApiUrl(`/api/v1/cases/${caseId}/human-action`), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action, reason, operator_id: operatorId })
